@@ -14,4 +14,5 @@ public class Constants {
     //Use static for variables that you want to reach from anywhere in the app...
     //public static Firebase myFirebaseRef = new Firebase("https://blinding-inferno-6351.firebaseio.com");
     public static Firebase myFirebaseRef = new Firebase("https://scorching-fire-1846.firebaseio.com/");
+    public static Firebase wordsRef = new Firebase("https://scorching-fire-1846.firebaseio.com/Regular Words/");
 }

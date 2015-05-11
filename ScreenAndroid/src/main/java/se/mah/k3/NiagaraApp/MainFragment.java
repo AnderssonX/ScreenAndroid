@@ -15,15 +15,18 @@ import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 
+import java.util.Random;
+
 /**
  * Created by K3LARA on 28/03/2015.
  */
-public class MainFragment extends Fragment implements View.OnClickListener, View.OnTouchListener, ValueEventListener{
+public class MainFragment extends Fragment implements View.OnClickListener, View.OnTouchListener, ValueEventListener {
     long lastTimeStamp = System.currentTimeMillis();
     long timeLastRound;
     int width;
     int height;
     private long roundTrip = 0;
+
     public MainFragment() {
     }
 
@@ -37,6 +40,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, View
         width = size.x;
         height = size.y;
 
+        addRandomWord();
         //Add listeners for the touch events onTouch will be called when screen is touched.
         rootView.setOnTouchListener(this);
 
@@ -47,21 +51,21 @@ public class MainFragment extends Fragment implements View.OnClickListener, View
         //Create listeners for response time back so know when the token returns
         String userName = Constants.userName;
         Firebase fireBaseEntryForMyID = Constants.myFirebaseRef.child(Constants.userName); //My part of the firebase
-        Firebase fireBaseEntryForRoundBack =  fireBaseEntryForMyID.child("RoundTripBack"); //My roundtrip (Check firebase)
+
+        Firebase fireBaseEntryForRoundBack = fireBaseEntryForMyID.child("RoundTripBack"); //My roundtrip (Check firebase)
         //Listen for changes on "RoundTripBack" entry onDataChange will be called when "RoundTripBack" is changed
         fireBaseEntryForRoundBack.addValueEventListener(this);
         return rootView;
     }
 
-
-     //Start a new time measure of roundtrip time
-     @Override
+    //Start a new time measure of roundtrip time
+    @Override
     public void onClick(View v) {
-         if (v.getId()==R.id.iv_refresh) {
-             roundTrip = roundTrip + 1; //Assuming that we are the only one using our ID
-             lastTimeStamp = System.currentTimeMillis();  //remember when we sent the token
-             Constants.myFirebaseRef.child(Constants.userName).child("RoundTripTo").setValue(roundTrip);
-         }
+        if (v.getId() == R.id.iv_refresh) {
+            roundTrip = roundTrip + 1; //Assuming that we are the only one using our ID
+            lastTimeStamp = System.currentTimeMillis();  //remember when we sent the token
+            Constants.myFirebaseRef.child(Constants.userName).child("RoundTripTo").setValue(roundTrip);
+        }
     }
 
     //called if we move on the screen send the coordinates to fireBase
@@ -69,8 +73,8 @@ public class MainFragment extends Fragment implements View.OnClickListener, View
     public boolean onTouch(View v, MotionEvent event) {
         switch (event.getAction()) {
             case MotionEvent.ACTION_MOVE:  // If it is the motionEvent move.
-                float xRel = event.getX()/width;
-                float yRel = event.getRawY()/height;//Compensate for menubar can probably be solved more beautiful test with getY to see the difference
+                float xRel = event.getX() / width;
+                float yRel = event.getRawY() / height;//Compensate for menubar can probably be solved more beautiful test with getY to see the difference
                 Constants.myFirebaseRef.child(Constants.userName).child("xRel").setValue(xRel);  //Set the x Value
                 Constants.myFirebaseRef.child(Constants.userName).child("yRel").setValue(yRel);  //Set the y value
         }
@@ -91,6 +95,32 @@ public class MainFragment extends Fragment implements View.OnClickListener, View
     @Override
     public void onCancelled(FirebaseError firebaseError) {
 
+    }
+
+    private void addRandomWord() {
+
+        Random rand = new Random();
+        // First we grab a random number (0-6)
+        int n = rand.nextInt(6);
+
+        // Creating a ref to a random child in the Regular Words tree on firebase
+        Firebase fireBaseWords = Constants.myFirebaseRef.child("Regular Words/word" + n);
+
+        // Adds a "SINGLE" event listener to fetch value from child on firebase.
+
+        fireBaseWords.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // adds value of firebase child to textview "randomWord"
+                TextView wordTW = (TextView) getActivity().findViewById(R.id.randomWord);
+                wordTW.setText(dataSnapshot.getValue().toString());
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
     }
 }
 

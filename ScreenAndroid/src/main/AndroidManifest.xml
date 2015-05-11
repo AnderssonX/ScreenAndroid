@@ -9,7 +9,7 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name="se.mah.k3.NiagaraApp.MainActivity"
-            android:screenOrientation="landscape"
+            android:screenOrientation="portrait"
             android:label="ScreenAndroid" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
