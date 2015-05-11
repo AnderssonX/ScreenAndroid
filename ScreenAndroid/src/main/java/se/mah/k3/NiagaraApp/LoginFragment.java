@@ -1,4 +1,4 @@
-package se.mah.k3.klarappo;
+package se.mah.k3.NiagaraApp;
 
 
 import android.app.Fragment;
@@ -59,7 +59,7 @@ public class LoginFragment extends Fragment implements ValueEventListener
             Log.i("LoginFragment", "Screen nbr entered: " + val + " Value from firebase: "+screenNbrFromFirebase);
             EditText screenNumber = (EditText) getActivity().findViewById(R.id.screenNumber);
             EditText name = (EditText) getActivity().findViewById(R.id.name);
-            Constants.userName = name.getText().toString();
+            // Constants.userName = name.getText().toString();
             //Are we on the right screen
             if (screenNbrFromFirebase.equals(screenNumber.getText().toString())){
                 Log.i("LoginFragment", "Logged in");

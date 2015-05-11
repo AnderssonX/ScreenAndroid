@@ -1,7 +1,6 @@
-package se.mah.k3.klarappo;
+package se.mah.k3.NiagaraApp;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;

@@ -1,4 +1,4 @@
-package se.mah.k3.klarappo;
+package se.mah.k3.NiagaraApp;
 
 import com.firebase.client.Firebase;
 
