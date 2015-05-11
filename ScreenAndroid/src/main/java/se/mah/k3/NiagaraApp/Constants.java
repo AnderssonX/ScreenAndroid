@@ -6,7 +6,7 @@ import com.firebase.client.Firebase;
  * Created by K3LARA on 29/03/2015.
  */
 public class Constants {
-    public static String userName = "Alrik He";
+    public static String userName = "Joakim";
     public static int xPos = 101;
     public static int yPos = 100;
     //public static Firebase myFirebaseRef = new Firebase("https://klara.firebaseio.com/");
