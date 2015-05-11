@@ -12,10 +12,13 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
+
+import java.util.Collections;
 
 
 /**
@@ -23,8 +26,8 @@ import com.firebase.client.ValueEventListener;
  */
 public class LoginFragment extends Fragment implements ValueEventListener
 {
-
-
+    private Firebase myFirebaseRef;
+    public static Word w = new Word(true,"test");
     public LoginFragment() {
         // Required empty public constructor
     }
@@ -47,7 +50,70 @@ public class LoginFragment extends Fragment implements ValueEventListener
                 fireBaseEntryForScreenNbr.addValueEventListener(LoginFragment.this);
             }
         });
+
+
+        Log.i("börja!!!!!!!!!!!", w.getText());
+
+        myFirebaseRef = new Firebase("https://scorching-fire-1846.firebaseio.com/");  // alrik
+        myFirebaseRef.child("Word1").setValue("ehhehsjhdhdjfdssf");
+        //  myFirebaseRef.removeValue(); //Cleans out everything
+        // use method getText from the word class to set text to "word1" in the firebase db.
+
+        //myFirebaseRef.addChildEventListener(new ChildEventListener() {
+        //myFirebaseRef.child("word1").addChildEventListener(new ChildEventListener() {
+
+        //myFirebaseRef.child("Word1").addListenerForSingleValueEvent(new ValueEventListener() {
+            myFirebaseRef.child("Word1").addValueEventListener(new ValueEventListener() {
+         //   @Override
+            public void onChildRemoved(DataSnapshot arg0) {
+            }
+
+           // @Override
+            public void onChildMoved(DataSnapshot arg0, String arg1) {
+            }
+
+            //A user changed some value so update
+
+            public void onChildChanged(DataSnapshot arg0, String arg1) {
+                Iterable<DataSnapshot> dsList = arg0.getChildren();
+                Log.i("börja!!!", "funkacasdfasdfsadfadsffasdfasdfasdf");
+                // int place=1;
+
+                if (arg0.getKey().equals("text")) {
+                    w.setText(String.valueOf(arg0.getValue()));
+                }
+                if (arg0.getKey().equals("active")) {
+                    w.setActive(Boolean.valueOf(String.valueOf(arg0.getValue())));
+                }
+
+                Log.i("börja!!!", "word1:" + w.getText() + "    firebase" + String.valueOf(arg0.getValue()));
+
+            }
+
+            //We got a new user
+
+            public void onChildAdded(DataSnapshot arg0, String arg1) {
+                if (arg0.hasChildren()) {
+
+                }
+            }
+
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.i("börja!!!", "    firebase: " + dataSnapshot.getValue());
+            }
+
+            @Override
+            public void onCancelled(FirebaseError arg0) {
+
+            }
+        });
+
+
         return returnView;
+
+
+
     }
 
 

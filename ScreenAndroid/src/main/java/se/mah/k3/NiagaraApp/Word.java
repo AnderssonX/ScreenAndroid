@@ -26,5 +26,8 @@ public class Word {
         return active;
     }
 
+    public void setActive(Boolean _active){
 
+        this.active=_active;
+    }
 }
