@@ -3,6 +3,7 @@ package se.mah.k3.NiagaraApp;
 import android.app.Fragment;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -25,6 +26,9 @@ public class MainFragment extends Fragment implements View.OnClickListener, View
     long timeLastRound;
     int width;
     int height;
+    int randomNo = 99;
+    int n;
+    int wordListSize;
     private long roundTrip = 0;
 
     public MainFragment() {
@@ -99,12 +103,32 @@ public class MainFragment extends Fragment implements View.OnClickListener, View
 
     private void addRandomWord() {
 
-        Random rand = new Random();
-        // First we grab a random number (0-6)
-        int n = rand.nextInt(6);
+        Firebase fbNumWords = Constants.myFirebaseRef.child("Regular Words Size");
 
+        // Adds a "SINGLE" event listener to fetch value from child on firebase.
+
+        fbNumWords.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // adds value of firebase child to textview "randomWord"
+                String size = dataSnapshot.getValue().toString();
+                wordListSize = Integer.parseInt(size);
+                Log.i("SIze", String.valueOf(wordListSize));
+                n = wordListSize;
+                makeRandom();
+                getWord();
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+    }
+
+    public void getWord() {
         // Creating a ref to a random child in the Regular Words tree on firebase
-        final Firebase fireBaseWords = Constants.myFirebaseRef.child("Regular Words/word" + n);
+        final Firebase fireBaseWords = Constants.myFirebaseRef.child("Regular Words/word" + randomNo);
 
         // Adds a "SINGLE" event listener to fetch value from child on firebase.
 
@@ -113,7 +137,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, View
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // adds value of firebase child to textview "randomWord"
                 TextView wordTW = (TextView) getActivity().findViewById(R.id.randomWord);
-                wordTW.setText(dataSnapshot.child("text").getValue().toString());
+                wordTW.setText(dataSnapshot.child("text").getValue().toString() + " " + n);
                 fireBaseWords.child("Active").setValue(true);
             }
 
@@ -122,6 +146,18 @@ public class MainFragment extends Fragment implements View.OnClickListener, View
 
             }
         });
+    }
+
+
+    public void makeRandom()
+
+    {
+
+        Random rand = new Random();
+        // First we grab a random number (0-6)
+        //  int n = rand.nextInt((int)(wordListSize+1));
+        int n = rand.nextInt(wordListSize);
+        randomNo = n;
     }
 }
 
