@@ -35,6 +35,8 @@ public class MainFragment extends Fragment implements View.OnClickListener, View
     View rootView;
     Button wordBtn;
     TextView wordArea;
+    private Firebase myFirebaseRef;
+
 
     public MainFragment() {
     }
@@ -50,6 +52,8 @@ public class MainFragment extends Fragment implements View.OnClickListener, View
         height = size.y;
 
         addRandomWord();
+
+
         //Add listeners for the touch events onTouch will be called when screen is touched.
         rootView.setOnTouchListener(this);
 
@@ -91,6 +95,10 @@ public class MainFragment extends Fragment implements View.OnClickListener, View
 
             wordArea = (TextView) rootView.findViewById(R.id.wordDisplayArea);
             wordArea.setText(randomWord);
+
+            myFirebaseRef = new Firebase("https://scorching-fire-1846.firebaseio.com/").child("Regular Words/word" + randomNo);
+            myFirebaseRef.child("Active").setValue("True");
+            Log.i("Buttonclick", myFirebaseRef.child("Active").getRef().toString());
             getNewWord();
 
             Log.i("wordBtn", "TestButton");
@@ -167,9 +175,9 @@ public class MainFragment extends Fragment implements View.OnClickListener, View
 
                 randomWord = dataSnapshot.child("text").getValue().toString();
                 wordBtn.setText(randomWord);
+                //fireBaseWords.child("Active").setValue(true);
 
 
-                fireBaseWords.child("Active").setValue(true);
             }
 
             @Override

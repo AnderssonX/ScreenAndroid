@@ -55,7 +55,7 @@ public class LoginFragment extends Fragment implements ValueEventListener
         Log.i("börja!!!!!!!!!!!", w.getText());
 
         myFirebaseRef = new Firebase("https://scorching-fire-1846.firebaseio.com/");  // alrik
-        myFirebaseRef.child("Word1").setValue("ehhehsjhdhdjfdssf");
+        //myFirebaseRef.child("Word1").setValue("ehhehsjhdhdjfdssf");
         //  myFirebaseRef.removeValue(); //Cleans out everything
         // use method getText from the word class to set text to "word1" in the firebase db.
 
