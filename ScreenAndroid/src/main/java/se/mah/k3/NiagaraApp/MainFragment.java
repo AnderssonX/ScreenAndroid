@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -95,7 +96,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, View
 
             wordArea = (TextView) rootView.findViewById(R.id.wordDisplayArea);
             wordArea.setText(randomWord);
-
+            wordArea.startAnimation(AnimationUtils.loadAnimation(getActivity(), android.R.anim.fade_in));
             myFirebaseRef = new Firebase("https://scorching-fire-1846.firebaseio.com/").child("Regular Words/word" + randomNo);
             myFirebaseRef.child("Active").setValue("True");
             Log.i("Buttonclick", myFirebaseRef.child("Active").getRef().toString());
