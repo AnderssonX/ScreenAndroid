@@ -34,6 +34,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, View
     String randomWord;
     View rootView;
     Button wordBtn;
+    TextView wordArea;
 
     public MainFragment() {
     }
@@ -53,14 +54,14 @@ public class MainFragment extends Fragment implements View.OnClickListener, View
         rootView.setOnTouchListener(this);
 
         //Add listeners to initiate a measure of roundtrip time onClick will be called.
-        View v = rootView.findViewById(R.id.iv_refresh);
-        v.setOnClickListener(this);
+//        View v = rootView.findViewById(R.id.iv_refresh);
+//        v.setOnClickListener(this);
 
 
         wordBtn = (Button) rootView.findViewById(R.id.wordBtn);
         wordBtn.setOnClickListener(this);
 
-
+        wordArea.
 
 
         //Create listeners for response time back so know when the token returns
@@ -76,17 +77,19 @@ public class MainFragment extends Fragment implements View.OnClickListener, View
     //Start a new time measure of roundtrip time
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.iv_refresh) {
+//        if (v.getId() == R.id.iv_refresh) {
 //            roundTrip = roundTrip + 1; //Assuming that we are the only one using our ID
 //            lastTimeStamp = System.currentTimeMillis();  //remember when we sent the token
 //            Constants.myFirebaseRef.child(Constants.userName).child("RoundTripTo").setValue(roundTrip);
-
-        }
+//
+//        }
 
 
         if (v.getId() == R.id.wordBtn) {
 
-            TextView wordArea = (TextView) rootView.findViewById(R.id.wordDisplayArea);
+            //wordArea.setVisibility(View.VISIBLE);
+
+            wordArea = (TextView) rootView.findViewById(R.id.wordDisplayArea);
             wordArea.setText(randomWord);
 
 
@@ -111,12 +114,12 @@ public class MainFragment extends Fragment implements View.OnClickListener, View
     //This is called when the roundtrip is completed so show the time
     @Override
     public void onDataChange(DataSnapshot dataSnapshot) {
-        if (roundTrip > 0 && dataSnapshot != null) {
-            roundTrip = (long) dataSnapshot.getValue();
-            timeLastRound = System.currentTimeMillis() - lastTimeStamp;
-            TextView timeLastTV = (TextView) getActivity().findViewById(R.id.timelast);
-            timeLastTV.setText("" + timeLastRound);
-        }
+//        if (roundTrip > 0 && dataSnapshot != null) {
+//            roundTrip = (long) dataSnapshot.getValue();
+//            timeLastRound = System.currentTimeMillis() - lastTimeStamp;
+//            TextView timeLastTV = (TextView) getActivity().findViewById(R.id.timelast);
+//            timeLastTV.setText("" + timeLastRound);
+//        }
     }
 
     @Override
