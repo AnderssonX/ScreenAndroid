@@ -1,6 +1,10 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" tools:context="se.mah.k3.NiagaraApp.LoginFragment">
+    android:layout_height="match_parent"
+    tools:context="se.mah.k3.NiagaraApp.LoginFragment"
+
+    android:paddingTop="90dp"
+    android:background="@drawable/portrait2">
 
     <!-- TODO: Update blank fragment layout -->
 
@@ -14,17 +18,29 @@
         android:text="145"
         android:layout_alignParentTop="true"
         android:layout_toEndOf="@+id/textView2"
-        android:layout_marginStart="31dp" />
+        android:layout_marginStart="31dp"
+        android:textColor="#ffffffff" />
 
-    <Button
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@id/screenNumber"
+        android:paddingTop="20dp"
+        android:gravity="right"
+        android:paddingRight="18dp">
+
+        <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Logon"
         android:id="@+id/btnLogon"
-        android:layout_gravity="center_horizontal|bottom"
-        android:layout_marginTop="30dp"
+
+            android:layout_marginTop="30dp"
         android:layout_below="@+id/textView3"
-        android:layout_alignStart="@+id/name" />
+            android:layout_alignStart="@+id/name"
+            android:textStyle="bold" />
+    </LinearLayout>
 
     <EditText
         android:layout_width="wrap_content"
@@ -35,7 +51,8 @@
         android:layout_gravity="center_horizontal|top"
         android:layout_below="@+id/screenNumber"
         android:layout_alignStart="@+id/screenNumber"
-        android:text="anonymous" />
+        android:text="user"
+        android:textColor="#ffffffff" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -45,7 +62,8 @@
         android:layout_alignBottom="@+id/screenNumber"
         android:layout_alignParentStart="true"
         android:layout_gravity="left"
-        android:layout_marginLeft="16dp" />
+        android:layout_marginLeft="16dp"
+        android:textColor="#ffffffff" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -54,6 +72,7 @@
         android:id="@+id/textView3"
         android:layout_alignBottom="@+id/name"
         android:layout_alignParentStart="true"
-        android:layout_marginLeft="16dp" />
+        android:layout_marginLeft="16dp"
+        android:textColor="#ffffffff" />
 
 </RelativeLayout>
