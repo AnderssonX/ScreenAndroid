@@ -61,7 +61,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, View
         wordBtn = (Button) rootView.findViewById(R.id.wordBtn);
         wordBtn.setOnClickListener(this);
 
-        wordArea.
+
 
 
         //Create listeners for response time back so know when the token returns
@@ -91,7 +91,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, View
 
             wordArea = (TextView) rootView.findViewById(R.id.wordDisplayArea);
             wordArea.setText(randomWord);
-
+            getNewWord();
 
             Log.i("wordBtn", "TestButton");
 
@@ -189,6 +189,10 @@ public class MainFragment extends Fragment implements View.OnClickListener, View
         //  int n = rand.nextInt((int)(wordListSize+1));
         int n = rand.nextInt(wordListSize);
         randomNo = n;
+    }
+    public void getNewWord(){
+        addRandomWord();
+        getWord();
     }
 }
 
