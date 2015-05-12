@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.firebase.client.DataSnapshot;
@@ -30,6 +31,9 @@ public class MainFragment extends Fragment implements View.OnClickListener, View
     int n;
     int wordListSize;
     private long roundTrip = 0;
+    String randomWord;
+    View rootView;
+    Button wordBtn;
 
     public MainFragment() {
     }
@@ -37,7 +41,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, View
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+        rootView = inflater.inflate(R.layout.fragment_main, container, false);
         Display display = getActivity().getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
@@ -51,6 +55,13 @@ public class MainFragment extends Fragment implements View.OnClickListener, View
         //Add listeners to initiate a measure of roundtrip time onClick will be called.
         View v = rootView.findViewById(R.id.iv_refresh);
         v.setOnClickListener(this);
+
+
+        wordBtn = (Button) rootView.findViewById(R.id.wordBtn);
+        wordBtn.setOnClickListener(this);
+
+
+
 
         //Create listeners for response time back so know when the token returns
         String userName = Constants.userName;
@@ -66,9 +77,21 @@ public class MainFragment extends Fragment implements View.OnClickListener, View
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.iv_refresh) {
-            roundTrip = roundTrip + 1; //Assuming that we are the only one using our ID
-            lastTimeStamp = System.currentTimeMillis();  //remember when we sent the token
-            Constants.myFirebaseRef.child(Constants.userName).child("RoundTripTo").setValue(roundTrip);
+//            roundTrip = roundTrip + 1; //Assuming that we are the only one using our ID
+//            lastTimeStamp = System.currentTimeMillis();  //remember when we sent the token
+//            Constants.myFirebaseRef.child(Constants.userName).child("RoundTripTo").setValue(roundTrip);
+
+        }
+
+
+        if (v.getId() == R.id.wordBtn) {
+
+            TextView wordArea = (TextView) rootView.findViewById(R.id.wordDisplayArea);
+            wordArea.setText(randomWord);
+
+
+            Log.i("wordBtn", "TestButton");
+
         }
     }
 
@@ -136,8 +159,13 @@ public class MainFragment extends Fragment implements View.OnClickListener, View
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // adds value of firebase child to textview "randomWord"
-                TextView wordTW = (TextView) getActivity().findViewById(R.id.randomWord);
-                wordTW.setText(dataSnapshot.child("text").getValue().toString() + " " + n);
+//                TextView wordTW = (TextView) getActivity().findViewById(R.id.wordDisplayArea);
+//                wordTW.setText(dataSnapshot.child("text").getValue().toString() + " " + n);
+
+                randomWord = dataSnapshot.child("text").getValue().toString();
+                wordBtn.setText(randomWord);
+
+
                 fireBaseWords.child("Active").setValue(true);
             }
 
