@@ -67,8 +67,6 @@ public class MainFragment extends Fragment implements View.OnClickListener, View
         wordBtn.setOnClickListener(this);
 
 
-
-
         //Create listeners for response time back so know when the token returns
         String userName = Constants.userName;
         Firebase fireBaseEntryForMyID = Constants.myFirebaseRef.child(Constants.userName); //My part of the firebase
@@ -100,7 +98,6 @@ public class MainFragment extends Fragment implements View.OnClickListener, View
             wordArea.startAnimation(AnimationUtils.loadAnimation(getActivity(), android.R.anim.slide_in_left));
             myFirebaseRef = new Firebase("https://scorching-fire-1846.firebaseio.com/").child("Regular Words/word" + randomNo);
             myFirebaseRef.child("Active").setValue("True");
-            myFirebaseRef.child("Active").setValue("False");
             Log.i("Buttonclick", myFirebaseRef.child("Active").getRef().toString());
             getNewWord();
 
@@ -202,7 +199,8 @@ public class MainFragment extends Fragment implements View.OnClickListener, View
         int n = rand.nextInt(wordListSize);
         randomNo = n;
     }
-    public void getNewWord(){
+
+    public void getNewWord() {
         addRandomWord();
         getWord();
     }
