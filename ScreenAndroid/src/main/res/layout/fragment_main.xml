@@ -42,7 +42,8 @@
 
         android:textColor="#ffffffff"
         android:padding="20dp"
-        android:visibility="visible" />
+        android:visibility="visible"
+        android:background="#009688" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -59,7 +60,7 @@
             android:text="random word"
             android:textStyle="bold"
         android:id="@+id/wordBtn"
-            android:background="#ff444444"
+            android:background="#009688"
             android:layout_gravity="center|center_horizontal"
 
             android:textColor="#ffffffff" />

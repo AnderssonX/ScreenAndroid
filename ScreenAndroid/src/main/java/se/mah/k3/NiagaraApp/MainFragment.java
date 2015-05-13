@@ -176,6 +176,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, View
 
                 randomWord = dataSnapshot.child("text").getValue().toString();
                 wordBtn.setText(randomWord);
+
                 //fireBaseWords.child("Active").setValue(true);
 
 
