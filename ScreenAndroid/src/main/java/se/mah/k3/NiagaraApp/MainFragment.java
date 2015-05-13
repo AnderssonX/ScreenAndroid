@@ -95,6 +95,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, View
             //wordArea.setVisibility(View.VISIBLE);
 
             wordArea = (TextView) rootView.findViewById(R.id.wordDisplayArea);
+            wordArea.setVisibility(View.VISIBLE);
             wordArea.setText(randomWord);
             wordArea.startAnimation(AnimationUtils.loadAnimation(getActivity(), android.R.anim.slide_in_left));
             myFirebaseRef = new Firebase("https://scorching-fire-1846.firebaseio.com/").child("Regular Words/word" + randomNo);

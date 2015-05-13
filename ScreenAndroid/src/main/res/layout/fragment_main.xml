@@ -38,11 +38,11 @@
         android:layout_marginTop="100dp"
         android:layout_centerHorizontal="true"
         android:textSize="32sp"
-        android:textStyle="bold"
+        android:textStyle="normal"
 
         android:textColor="#ffffffff"
-        android:padding="20dp"
-        android:visibility="visible"
+        android:padding="18dp"
+        android:visibility="gone"
         android:background="#009688" />
 
     <LinearLayout
