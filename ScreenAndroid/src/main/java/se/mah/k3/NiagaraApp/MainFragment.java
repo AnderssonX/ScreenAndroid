@@ -97,7 +97,8 @@ public class MainFragment extends Fragment implements View.OnClickListener, View
             wordArea.setText(randomWord);
             wordArea.startAnimation(AnimationUtils.loadAnimation(getActivity(), android.R.anim.slide_in_left));
             myFirebaseRef = new Firebase("https://scorching-fire-1846.firebaseio.com/").child("Regular Words/word" + randomNo);
-            myFirebaseRef.child("Active").setValue("True");
+
+            myFirebaseRef.child("Active").setValue(true);
             Log.i("Buttonclick", myFirebaseRef.child("Active").getRef().toString());
             getNewWord();
 
@@ -174,6 +175,9 @@ public class MainFragment extends Fragment implements View.OnClickListener, View
 //                wordTW.setText(dataSnapshot.child("text").getValue().toString() + " " + n);
 
                 randomWord = dataSnapshot.child("text").getValue().toString();
+                if (dataSnapshot.child("Active").getValue().toString() == "true") {
+                    fireBaseWords.child("Active").setValue(false);
+                }
                 wordBtn.setText(randomWord);
 
                 //fireBaseWords.child("Active").setValue(true);
