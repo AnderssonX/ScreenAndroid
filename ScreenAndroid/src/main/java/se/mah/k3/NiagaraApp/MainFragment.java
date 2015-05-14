@@ -373,6 +373,16 @@ Log.i("DraggedItem", "Dragged item is over right image!");
                             myFirebaseRef = new Firebase("https://scorching-fire-1846.firebaseio.com/").child("Regular Words/word" + randomNo);
                             myFirebaseRef.child("Active").setValue(true);
                             myFirebaseRef.child("Active").setValue(false);
+
+                            // Try to send position
+                            //float x = dragEvent.getX() / width;
+                            //float y = dragEvent.getY() / height;//Compensate for menubar can probably be solved more beautiful test with getY to see the difference
+                            float x = dragEvent.getX();
+                            float y = dragEvent.getY();
+                            myFirebaseRef.child("x").setValue(x);  //Set the x Value
+                            myFirebaseRef.child("y").setValue(y);  //Set the y value
+                            //
+
                             Log.i("Setting ", myFirebaseRef + " Active to: true");
 
                         ViewGroup draggedImageViewParentLayout
@@ -381,11 +391,11 @@ Log.i("DraggedItem", "Dragged item is over right image!");
                             RelativeLayout bottomLinearLayout = (RelativeLayout) v;
                         bottomLinearLayout.addView(draggedImageView);
                         draggedImageView.setVisibility(View.VISIBLE);
-                        int x = (int) dragEvent.getX() + 5 - dragImg.getWidth() / 2 ;
-                            int y = (int) dragEvent.getY() + 5 - dragImg.getHeight() / 2;
-                        Log.i("X: "+x,", Y: "+y);
+                            int xin = (int) dragEvent.getX() + 5 - dragImg.getWidth() / 2;
+                            int yIn = (int) dragEvent.getY() + 5 - dragImg.getHeight() / 2;
+                            Log.i("X: " + xin, ", Y: " + yIn);
                             Log.i("StartX is :" + startX, " startY is: " + startY);
-                            Log.i("X is :" + x, " Y is: " + y);
+                            Log.i("X is :" + xin, " Y is: " + yIn);
                             Log.i("dragImg X is :" + dragImg.getX(), " dragImg y is: " + dragImg.getY());
                             // myFirebaseRef = new Firebase("https://scorching-fire-1846.firebaseio.com/").child("Regular Words/word" + randomNo);
 
@@ -395,8 +405,8 @@ Log.i("DraggedItem", "Dragged item is over right image!");
                             TextView tw = new TextView(v.getContext());
 
                             tw.setVisibility(View.VISIBLE);
-                            tw.setX(x);
-                            tw.setY(y);
+                            tw.setX(xin);
+                            tw.setY(yIn);
                             tw.setTextSize(22);
                             tw.setTextColor(Color.WHITE);
                             tw.setPadding(9, 9, 9, 9);
