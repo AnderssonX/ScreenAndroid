@@ -3,9 +3,12 @@ package se.mah.k3.NiagaraApp;
 import android.app.Fragment;
 import android.content.ClipData;
 import android.content.ClipDescription;
+import android.graphics.Color;
 import android.graphics.Point;
+import android.graphics.Typeface;
 import android.media.Image;
 import android.os.Bundle;
+import android.text.Layout;
 import android.util.Log;
 import android.view.Display;
 import android.view.DragEvent;
@@ -26,6 +29,8 @@ import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 
+import org.w3c.dom.Text;
+
 import java.util.Random;
 
 /**
@@ -34,8 +39,8 @@ import java.util.Random;
 public class MainFragment extends Fragment implements View.OnClickListener, View.OnTouchListener, ValueEventListener, View.OnLongClickListener, View.OnDragListener {
     long lastTimeStamp = System.currentTimeMillis();
     long timeLastRound;
-    public float startX;
-    public float startY;
+    public int startX;
+    public int startY;
     public float OffsetX;
     public float OffsetY;
     int width;
@@ -50,10 +55,10 @@ public class MainFragment extends Fragment implements View.OnClickListener, View
     Button wordBtn;
     TextView wordArea;
     private Firebase myFirebaseRef;
-    AbsoluteLayout layout;
-
+    RelativeLayout layout;
+    AbsoluteLayout wordTray;
     // DD related Declaration
-    ImageView dragImg;
+    Button dragImg;
     ImageView leftImage;
 
     public MainFragment() {
@@ -73,15 +78,13 @@ public class MainFragment extends Fragment implements View.OnClickListener, View
 
         // DD stuff
         //Attach a longclick listener to an imageview
-        dragImg = (ImageView) rootView.findViewById(R.id.dragImage);
+        dragImg = (Button) rootView.findViewById(R.id.wordBtn);
+
+
         dragImg.setOnLongClickListener(this);
-
         leftImage = (ImageView) rootView.findViewById(R.id.dragImg2);
-        startX=dragImg.getX();
-        startY=dragImg.getY();
-
         //Attach a draglistener to the layout
-        layout = (AbsoluteLayout) rootView.findViewById(R.id.layout);
+        layout = (RelativeLayout) rootView.findViewById(R.id.layout);
         layout.setOnDragListener(this);
 
         //Add listeners for the touch events onTouch will be called when screen is touched.
@@ -94,6 +97,13 @@ public class MainFragment extends Fragment implements View.OnClickListener, View
 
 
         wordBtn = (Button) rootView.findViewById(R.id.wordBtn);
+        startX = (int) wordBtn.getX();
+        startX = (int) wordBtn.getX();
+
+        startX = Math.round(wordBtn.getX());
+        startY = Math.round(wordBtn.getY());
+
+        Log.i("StartX is :" + startX, " startY is: " + startY);
         wordBtn.setOnClickListener(this);
 
 
@@ -122,17 +132,16 @@ public class MainFragment extends Fragment implements View.OnClickListener, View
 
             //wordArea.setVisibility(View.VISIBLE);
 
-            wordArea = (TextView) rootView.findViewById(R.id.wordDisplayArea);
+            // wordArea = (TextView) rootView.findViewById(R.id.wordDisplayArea);
             wordArea.setVisibility(View.VISIBLE);
             wordArea.setText(randomWord);
             wordArea.startAnimation(AnimationUtils.loadAnimation(getActivity(), android.R.anim.slide_in_left));
             myFirebaseRef = new Firebase("https://scorching-fire-1846.firebaseio.com/").child("Regular Words/word" + randomNo);
 
             myFirebaseRef.child("Active").setValue(true);
-            Log.i("Buttonclick", myFirebaseRef.child("Active").getRef().toString());
+            Log.i("buttonclick_wordbtn_setValue", myFirebaseRef.child("Active").getRef().toString());
             getNewWord();
 
-            Log.i("wordBtn", "TestButton");
 
         }
     }
@@ -207,8 +216,10 @@ public class MainFragment extends Fragment implements View.OnClickListener, View
                 randomWord = dataSnapshot.child("text").getValue().toString();
                 if (dataSnapshot.child("Active").getValue().toString() == "true") {
                     fireBaseWords.child("Active").setValue(false);
+                    Log.i("getWord", "Set Value");
                 }
                 wordBtn.setText(randomWord);
+                dragImg.setText(randomWord);
 
                 //fireBaseWords.child("Active").setValue(true);
 
@@ -235,9 +246,51 @@ public class MainFragment extends Fragment implements View.OnClickListener, View
     }
 
     public void getNewWord() {
+
+        myFirebaseRef = new Firebase("https://scorching-fire-1846.firebaseio.com/").child("Regular Words/word" + randomNo);
+
+        myFirebaseRef.child("Active").setValue(true);
+        Log.i("getNewWord_setValue", myFirebaseRef.child("Active").getRef().toString());
+
+        wordTray = (AbsoluteLayout) rootView.findViewById(R.id.wordTrayLayout);
+        wordTray.removeAllViews();
+        Button newButton = new Button(rootView.getContext());
+        dragImg = newButton;
+        dragImg.setId(R.id.wordBtn);
+        dragImg.setText("new button!");
+        wordTray.addView(dragImg);
+        // getNewWord();
         addRandomWord();
-        getWord();
+        int x = wordTray.getWidth() / 2;
+        int y = wordTray.getHeight() / 2;
+
+        dragImg.setX(400);
+        dragImg.setY(100);
+
+        dragImg.setOnLongClickListener(this);
+
     }
+
+    public void resetWord() {
+
+        wordTray = (AbsoluteLayout) rootView.findViewById(R.id.wordTrayLayout);
+        wordTray.removeAllViews();
+        Button newButton = new Button(rootView.getContext());
+        dragImg = newButton;
+        dragImg.setId(R.id.wordBtn);
+        dragImg.setText(" ");
+        wordTray.addView(dragImg);
+        //addRandomWord();
+        int x = wordTray.getWidth() / 2;
+        int y = wordTray.getHeight() / 2;
+
+        dragImg.setX(400);
+        dragImg.setY(100);
+        dragImg.setText(randomWord);
+        dragImg.setOnLongClickListener(this);
+
+    }
+
 
     @Override
     public boolean onLongClick(View v) {
@@ -311,19 +364,50 @@ Log.i("DraggedItem", "Dragged item is over right image!");
                     case R.id.dragImg2:
                         Log.i("TAGz", "Soccer ball");
                         return false;
-                    case R.id.dragImage:
+                    case R.id.wordBtn:
                         Log.i("TAGz", "Dragging word");
+                        if (dragEvent.getX() > leftImage.getX() && (dragEvent.getX() < leftImage.getX() + leftImage.getWidth() && (dragEvent.getY() > leftImage.getY() && (dragEvent.getY() < leftImage.getY() + leftImage.getHeight())))) {
+
+
                         ViewGroup draggedImageViewParentLayout
                                 = (ViewGroup) draggedImageView.getParent();
                         draggedImageViewParentLayout.removeView(draggedImageView);
-                        AbsoluteLayout bottomLinearLayout = (AbsoluteLayout) v;
+                            RelativeLayout bottomLinearLayout = (RelativeLayout) v;
                         bottomLinearLayout.addView(draggedImageView);
                         draggedImageView.setVisibility(View.VISIBLE);
                         int x = (int) dragEvent.getX() + 5 - dragImg.getWidth() / 2 ;
-                        int y= (int) dragEvent.getY() + 5 - dragImg.getHeight() / 2;
+                            int y = (int) dragEvent.getY() + 5 - dragImg.getHeight() / 2;
                         Log.i("X: "+x,", Y: "+y);
-                        dragImg.setX(x);
-                        dragImg.setY(y);
+                            Log.i("StartX is :" + startX, " startY is: " + startY);
+                            Log.i("X is :" + x, " Y is: " + y);
+                            Log.i("dragImg X is :" + dragImg.getX(), " dragImg y is: " + dragImg.getY());
+                            // myFirebaseRef = new Firebase("https://scorching-fire-1846.firebaseio.com/").child("Regular Words/word" + randomNo);
+
+                            // myFirebaseRef.child("Active").setValue(true);
+                            // Log.i("wordDropped", myFirebaseRef.child("Active").getRef().toString());
+
+                            TextView tw = new TextView(v.getContext());
+
+                            tw.setVisibility(View.VISIBLE);
+                            tw.setX(x);
+                            tw.setY(y);
+                            tw.setTextSize(22);
+                            tw.setTextColor(Color.WHITE);
+                            tw.setPadding(9, 9, 9, 9);
+                            tw.setBackgroundColor(Color.DKGRAY);
+                            tw.setTypeface(null, Typeface.BOLD);
+                            tw.setText(randomWord);
+                            layout.addView(tw);
+                            layout.removeView(dragImg);
+                            getNewWord();
+
+                            Log.i("draggedWord", "Dropped");
+                        } else {
+                            Log.i("draggedWord", " Can't be dropped here, resetting!");
+                            layout.removeView(dragImg);
+                            resetWord();
+                            ;
+                        }
                         return true;
                     case R.id.dragImage1:
                         Log.i("TAGz", "Rugby ball");
@@ -353,5 +437,11 @@ Log.i("DraggedItem", "Dragged item is over right image!");
 
         return false;
     }
+
+    public void dropWord() {
+
+    }
+
+
 }
 
