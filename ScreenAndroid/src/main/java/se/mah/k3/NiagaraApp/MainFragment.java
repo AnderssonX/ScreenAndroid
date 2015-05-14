@@ -73,6 +73,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, View
         display.getSize(size);
         width = size.x;
         height = size.y;
+
         addRandomWord();
 
 
@@ -139,7 +140,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, View
             myFirebaseRef = new Firebase("https://scorching-fire-1846.firebaseio.com/").child("Regular Words/word" + randomNo);
 
             myFirebaseRef.child("Active").setValue(true);
-            Log.i("buttonclick_wordbtn_setValue", myFirebaseRef.child("Active").getRef().toString());
+            Log.i("buttoncl", myFirebaseRef.child("Active").getRef().toString());
             getNewWord();
 
 
@@ -247,10 +248,10 @@ public class MainFragment extends Fragment implements View.OnClickListener, View
 
     public void getNewWord() {
 
-        myFirebaseRef = new Firebase("https://scorching-fire-1846.firebaseio.com/").child("Regular Words/word" + randomNo);
+        //         myFirebaseRef = new Firebase("https://scorching-fire-1846.firebaseio.com/").child("Regular Words/word" + randomNo);
 
-        myFirebaseRef.child("Active").setValue(true);
-        Log.i("getNewWord_setValue", myFirebaseRef.child("Active").getRef().toString());
+        // myFirebaseRef.child("Active").setValue(true);
+        // Log.i("getNewWord_setValue", myFirebaseRef.child("Active").getRef().toString());
 
         wordTray = (AbsoluteLayout) rootView.findViewById(R.id.wordTrayLayout);
         wordTray.removeAllViews();
@@ -260,7 +261,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, View
         dragImg.setText("new button!");
         wordTray.addView(dragImg);
         // getNewWord();
-        addRandomWord();
+
         int x = wordTray.getWidth() / 2;
         int y = wordTray.getHeight() / 2;
 
@@ -268,7 +269,8 @@ public class MainFragment extends Fragment implements View.OnClickListener, View
         dragImg.setY(100);
 
         dragImg.setOnLongClickListener(this);
-
+        addRandomWord();
+        // getWord();
     }
 
     public void resetWord() {
@@ -368,6 +370,10 @@ Log.i("DraggedItem", "Dragged item is over right image!");
                         Log.i("TAGz", "Dragging word");
                         if (dragEvent.getX() > leftImage.getX() && (dragEvent.getX() < leftImage.getX() + leftImage.getWidth() && (dragEvent.getY() > leftImage.getY() && (dragEvent.getY() < leftImage.getY() + leftImage.getHeight())))) {
 
+                            myFirebaseRef = new Firebase("https://scorching-fire-1846.firebaseio.com/").child("Regular Words/word" + randomNo);
+                            myFirebaseRef.child("Active").setValue(true);
+                            myFirebaseRef.child("Active").setValue(false);
+                            Log.i("Setting ", myFirebaseRef + " Active to: true");
 
                         ViewGroup draggedImageViewParentLayout
                                 = (ViewGroup) draggedImageView.getParent();
