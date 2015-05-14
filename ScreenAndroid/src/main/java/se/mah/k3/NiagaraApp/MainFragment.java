@@ -1,16 +1,24 @@
 package se.mah.k3.NiagaraApp;
 
 import android.app.Fragment;
+import android.content.ClipData;
+import android.content.ClipDescription;
 import android.graphics.Point;
+import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Display;
+import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
+import android.widget.AbsoluteLayout;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.firebase.client.DataSnapshot;
@@ -23,12 +31,17 @@ import java.util.Random;
 /**
  * Created by K3LARA on 28/03/2015.
  */
-public class MainFragment extends Fragment implements View.OnClickListener, View.OnTouchListener, ValueEventListener {
+public class MainFragment extends Fragment implements View.OnClickListener, View.OnTouchListener, ValueEventListener, View.OnLongClickListener, View.OnDragListener {
     long lastTimeStamp = System.currentTimeMillis();
     long timeLastRound;
+    public float startX;
+    public float startY;
+    public float OffsetX;
+    public float OffsetY;
     int width;
     int height;
     int randomNo = 99;
+    public String TAG="TagZ";
     int n;
     int wordListSize;
     private long roundTrip = 0;
@@ -37,7 +50,11 @@ public class MainFragment extends Fragment implements View.OnClickListener, View
     Button wordBtn;
     TextView wordArea;
     private Firebase myFirebaseRef;
+    AbsoluteLayout layout;
 
+    // DD related Declaration
+    ImageView dragImg;
+    ImageView leftImage;
 
     public MainFragment() {
     }
@@ -51,9 +68,21 @@ public class MainFragment extends Fragment implements View.OnClickListener, View
         display.getSize(size);
         width = size.x;
         height = size.y;
-
         addRandomWord();
 
+
+        // DD stuff
+        //Attach a longclick listener to an imageview
+        dragImg = (ImageView) rootView.findViewById(R.id.dragImage);
+        dragImg.setOnLongClickListener(this);
+
+        leftImage = (ImageView) rootView.findViewById(R.id.dragImg2);
+        startX=dragImg.getX();
+        startY=dragImg.getY();
+
+        //Attach a draglistener to the layout
+        layout = (AbsoluteLayout) rootView.findViewById(R.id.layout);
+        layout.setOnDragListener(this);
 
         //Add listeners for the touch events onTouch will be called when screen is touched.
         rootView.setOnTouchListener(this);
@@ -61,6 +90,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, View
         //Add listeners to initiate a measure of roundtrip time onClick will be called.
 //        View v = rootView.findViewById(R.id.iv_refresh);
 //        v.setOnClickListener(this);
+
 
 
         wordBtn = (Button) rootView.findViewById(R.id.wordBtn);
@@ -207,6 +237,121 @@ public class MainFragment extends Fragment implements View.OnClickListener, View
     public void getNewWord() {
         addRandomWord();
         getWord();
+    }
+
+    @Override
+    public boolean onLongClick(View v) {
+        // User long-clicks, let's start the drag operation!
+        // Create clip data holding information about what we're dragging, currently just empty until we need it for something
+        ClipData clipData = ClipData.newPlainText("", "");
+        // DragShadowBuilder creates what we want to drag, currently just a copy of the image.
+        View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(dragImg);
+        // startDrag starts the drag and drop operation. System sends drag events to all visible views, passing 4 parameters.
+        dragImg.startDrag(clipData, shadowBuilder, dragImg, 0);
+        // From here we go to the onDrag method
+        return false;
+         }
+
+    @Override
+    public boolean onDrag(View v, DragEvent dragEvent) {
+        View draggedImageView = (View) dragEvent.getLocalState();
+
+        // Handles each of the expected events
+        switch (dragEvent.getAction()) {
+
+            case DragEvent.ACTION_DRAG_STARTED:
+                String TAG="dragLog";
+                Log.i("TAGz", "drag action started");
+
+                // Determines if this View can accept the dragged data
+                if (dragEvent.getClipDescription()
+                        .hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
+                    Log.i("TAGz", "Can accept this data");
+
+                    // returns true to indicate that the View can accept the dragged data.
+                    return true;
+
+                } else {
+                    Log.i("TAGz", "Can not accept this data");
+
+                }
+
+                // Returns false. During the current drag and drop operation, this View will
+                // not receive events again until ACTION_DRAG_ENDED is sent.
+                return false;
+
+            case DragEvent.ACTION_DRAG_ENTERED:
+                Log.i("TAGz", "drag action entered");
+                OffsetX=dragEvent.getX();
+                OffsetY=dragEvent.getY();
+                draggedImageView.setVisibility(View.INVISIBLE);
+//                the drag point has entered the bounding box
+                return true;
+
+            case DragEvent.ACTION_DRAG_LOCATION:
+                Log.i("TAGz", "dragging location");
+    if(dragEvent.getX()>leftImage.getX()&&(dragEvent.getX()<leftImage.getX()+leftImage.getWidth()&&(dragEvent.getY()>leftImage.getY()&&(dragEvent.getY()<leftImage.getY()+leftImage.getHeight())))){
+Log.i("DraggedItem", "Dragged item is over right image!");
+            }
+                /*triggered after ACTION_DRAG_ENTERED
+                stops after ACTION_DRAG_EXITED*/
+                return true;
+
+            case DragEvent.ACTION_DRAG_EXITED:
+                Log.i("TAGz", "drag action exited");
+//                the drag shadow has left the bounding box
+                return true;
+
+            case DragEvent.ACTION_DROP:
+                  /* the listener receives this action type when
+                  drag shadow released over the target view
+            the action only sent here if ACTION_DRAG_STARTED returned true
+            return true if successfully handled the drop else false*/
+                switch (draggedImageView.getId()) {
+                    case R.id.dragImg2:
+                        Log.i("TAGz", "Soccer ball");
+                        return false;
+                    case R.id.dragImage:
+                        Log.i("TAGz", "Dragging word");
+                        ViewGroup draggedImageViewParentLayout
+                                = (ViewGroup) draggedImageView.getParent();
+                        draggedImageViewParentLayout.removeView(draggedImageView);
+                        AbsoluteLayout bottomLinearLayout = (AbsoluteLayout) v;
+                        bottomLinearLayout.addView(draggedImageView);
+                        draggedImageView.setVisibility(View.VISIBLE);
+                        int x = (int) dragEvent.getX() + 5 - dragImg.getWidth() / 2 ;
+                        int y= (int) dragEvent.getY() + 5 - dragImg.getHeight() / 2;
+                        Log.i("X: "+x,", Y: "+y);
+                        dragImg.setX(x);
+                        dragImg.setY(y);
+                        return true;
+                    case R.id.dragImage1:
+                        Log.i("TAGz", "Rugby ball");
+                        return false;
+                    default:
+                        Log.i("TAGz", "in default");
+                        return false;
+                }
+
+            case DragEvent.ACTION_DRAG_ENDED:
+
+                Log.i("TAGz", "drag action ended");
+                Log.i("TAGz", "getResult: " + dragEvent.getResult());
+
+//                if the drop was not successful, set the ball to visible
+                if (!dragEvent.getResult()) {
+                    Log.i("TAGz", "setting visible");
+                    draggedImageView.setVisibility(View.VISIBLE);
+                }
+
+                return true;
+            // An unknown action type was received.
+            default:
+                Log.i("TAGz", "Unknown action type received by OnDragListener.");
+                break;
+        }
+
+        return false;
     }
 }
 

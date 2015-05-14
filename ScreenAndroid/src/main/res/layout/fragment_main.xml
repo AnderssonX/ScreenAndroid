@@ -1,8 +1,9 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<AbsoluteLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/portrait2"
-    tools:context=".MainActivity$PlaceholderFragment">
+    tools:context=".MainActivity$PlaceholderFragment"
+    android:id="@+id/layout">
 
 
     <!--<TextView-->
@@ -30,6 +31,32 @@
     <!--android:layout_below="@+id/textView"-->
     <!--android:layout_alignParentEnd="true" />-->
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true"
+        android:background="#40000000"
+        android:gravity="center_horizontal"
+        android:id="@+id/wordTray">
+
+        <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:text="random word"
+            android:textStyle="bold"
+        android:id="@+id/wordBtn"
+            android:background="#009688"
+            android:layout_gravity="center|center_horizontal"
+
+            android:textColor="#ffffffff" />
+
+    </LinearLayout>
+<AbsoluteLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -45,25 +72,56 @@
         android:visibility="gone"
         android:background="#009688" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="120dp"
-        android:orientation="horizontal"
-        android:layout_alignParentBottom="true"
-        android:background="#40000000"
-        android:gravity="center_horizontal">
-
-        <Button
+    <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-            android:padding="16dp"
-            android:text="random word"
-            android:textStyle="bold"
-        android:id="@+id/wordBtn"
-            android:background="#009688"
-            android:layout_gravity="center|center_horizontal"
+        android:id="@+id/dragImage"
+        android:layout_below="@+id/wordDisplayArea"
+        android:layout_marginTop="41dp"
+        android:layout_marginEnd="271dp"
+        android:layout_marginBottom="265dp"
+        android:layout_above="@+id/wordTray"
+        android:visibility="visible"
+        android:layout_alignParentEnd="true"
+        android:longClickable="true"
+        android:cropToPadding="true"
+        android:src="@drawable/allarounddesigner"
+        android:layout_x="80dp"
+        android:layout_y="126dp" />
 
-            android:textColor="#ffffffff" />
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/dragImg2"
+        android:layout_marginTop="104dp"
+        android:visibility="visible"
+        android:longClickable="true"
+        android:layout_alignTop="@+id/dragImage"
+        android:layout_marginStart="89dp"
+        android:layout_above="@+id/wordTray"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="193dp"
+        android:layout_marginBottom="151dp"
+        android:src="@drawable/allarounddesigner"
+        android:layout_x="204dp"
+        android:layout_y="207dp" />
 
-    </LinearLayout>
-</RelativeLayout>
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/dragImage1"
+        android:layout_marginEnd="49dp"
+        android:layout_marginBottom="93dp"
+        android:longClickable="true"
+        android:visibility="visible"
+        android:layout_above="@+id/wordTray"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@+id/dragImg2"
+        android:layout_alignStart="@+id/dragImg2"
+        android:layout_marginStart="201dp"
+        android:layout_marginTop="96dp"
+        android:src="@drawable/allarounddesigner"
+        android:layout_x="0dp"
+        android:layout_y="222dp" />
+</AbsoluteLayout>
+</AbsoluteLayout>
