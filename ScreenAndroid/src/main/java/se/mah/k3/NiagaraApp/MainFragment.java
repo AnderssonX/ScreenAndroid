@@ -345,7 +345,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, View
                         if (dragEvent.getX() > dropArea.getX() && (dragEvent.getX() < dropArea.getX() + dropArea.getWidth() && (dragEvent.getY() > dropArea.getY() && (dragEvent.getY() < dropArea.getY() + dropArea.getHeight())))) {
 
                             myFirebaseRef = new Firebase("https://scorching-fire-1846.firebaseio.com/").child("Regular Words/word" + randomNo);
-                            myFirebaseRef.child("Active").setValue(true);
+
                             //myFirebaseRef.child("Active").setValue(false);
 
                             /* Send drop position to firebase by setting value x and y
@@ -356,7 +356,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, View
                             float yRel = dragEvent.getY() / height;
                             myFirebaseRef.child("x").setValue(xRel);
                             myFirebaseRef.child("y").setValue(yRel);
-
+                            myFirebaseRef.child("Active").setValue(true);
                             // This handles which layout we're dropping dragged item onto.
                             ViewGroup draggedImageViewParentLayout
                                     = (ViewGroup) draggedButton.getParent();
