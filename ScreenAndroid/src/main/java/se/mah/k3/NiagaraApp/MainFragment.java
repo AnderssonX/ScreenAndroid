@@ -164,9 +164,9 @@ public class MainFragment extends Fragment implements View.OnClickListener, View
                 n = wordListSize;
                 // Create random number based on wordlist size and get a word using that number
                 makeRandom();
-                Log.i("addRandomWord", "makeRandom: got no. " + n);
+                Log.i("addRandomWord", "makeRandom: got no. " + randomNo);
                 getWord();
-                Log.i("addRandomWord", "Grabbing word no. " + n + " using getWord" + n);
+                Log.i("addRandomWord", "getWord: word" + n);
             }
 
             @Override
@@ -188,8 +188,9 @@ public class MainFragment extends Fragment implements View.OnClickListener, View
 
                 randomWord = dataSnapshot.child("text").getValue().toString();
                 if (dataSnapshot.child("Active").getValue().toString() == "true") {
-                    fireBaseWords.child("Active").setValue(false);
-                    Log.i("getWord", "Set Value");
+                    getNewWord();
+                    //  fireBaseWords.child("Active").setValue(false);
+                    Log.i("getWord", "Word already active, getting a new one.");
                 }
                 Log.i("getWord", "got word: " + randomWord);
                 dragButton.setText(randomWord);
